@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="RestClientExamples.Test.Integration" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RestClientExamples.ExampleApi.Models\RestClientExamples.ExampleApi.Models.csproj" />
+  </ItemGroup>
+
+  <Target Name="GenerateOpenApiSpec" AfterTargets="Build" Condition="$(Configuration)=='Debug'">
+	<Exec Command="dotnet tool run swagger tofile --output openapi3.json $(OutputPath)$(AssemblyName).dll v1" WorkingDirectory="$(ProjectDir)" />
+  </Target>
+
+</Project>
