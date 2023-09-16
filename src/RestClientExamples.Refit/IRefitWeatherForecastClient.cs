@@ -5,6 +5,9 @@ namespace RestClientExamples.Refit;
 
 public interface IRefitWeatherForecastClient
 {
-    [Get("/WeatherForecast")]
-    Task<IEnumerable<WeatherForecast>> GetAsync();
+    [Get("/WeatherForecast/GetWeatherForecasts?location={location}")]
+    Task<IEnumerable<WeatherForecast>> GetAsync(string location);
+
+    [Post("/WeatherForecast/CreateWeatherReport")]
+    Task PostAsync(WeatherReport weatherForecast);
 }

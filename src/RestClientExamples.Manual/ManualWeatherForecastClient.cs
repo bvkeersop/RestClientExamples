@@ -4,7 +4,8 @@ namespace RestClientExamples.Manual;
 
 public interface IManualWeatherForecastClient
 {
-    Task<IEnumerable<WeatherForecast>> GetAsync();
+    Task<IEnumerable<WeatherForecast>> GetAsync(string location);
+    Task PostAsync(WeatherReport weatherReport);
 }
 
 public class ManualWeatherForecastClient : IManualWeatherForecastClient
@@ -13,13 +14,14 @@ public class ManualWeatherForecastClient : IManualWeatherForecastClient
     private readonly HttpClient _httpClient;
 
     public ManualWeatherForecastClient(HttpClient httpClient)
-	{
+    {
         _httpClient = httpClient;
     }
 
-    public async Task<IEnumerable<WeatherForecast>> GetAsync()
+    public async Task<IEnumerable<WeatherForecast>> GetAsync(string location)
     {
-        var response = await _httpClient.GetAsync(_weatherForecast);
+        var subUrl = $"{_weatherForecast}/GetWeatherForecasts?location={location}";
+        var response = await _httpClient.GetAsync(subUrl);
         response.EnsureSuccessStatusCode();
         var deserializedContent = await response.GetDeserializedContent<IEnumerable<WeatherForecast>>();
 
@@ -29,5 +31,13 @@ public class ManualWeatherForecastClient : IManualWeatherForecastClient
         }
 
         return deserializedContent;
+    }
+
+    public async Task PostAsync(WeatherReport weatherReport)
+    {
+        var subUrl = $"{_weatherForecast}/CreateWeatherReport";
+        var httpContent = weatherReport.ToJsonHttpContent();
+        var response = await _httpClient.PostAsync(subUrl, httpContent);
+        response.EnsureSuccessStatusCode();
     }
 }

@@ -1,14 +1,18 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using RestClientExamples.Cli;
+using RestClientExamples.Flurl;
 using RestClientExamples.Manual;
 using RestClientExamples.NSwag;
 using RestClientExamples.Refit;
+using RestClientExamples.RestEase;
 using RestClientExamples.RestSharp;
 using System.Reflection;
 
 Console.WriteLine("### RestClientExamples ###");
-Console.WriteLine("This console application will demo the retrieval of WeatherForecasts with multiple clients.");
+Console.WriteLine("This console application will demo the usage of multiple types of REST clients.");
 
-var exampleApiBaseAdress = new Uri("https://localhost:7020");
+var exampleApiBaseAdress = "https://localhost:7020";
+var exampleApiBaseUri = new Uri(exampleApiBaseAdress);
 var currentDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
 if (currentDir is null)
@@ -19,43 +23,44 @@ if (currentDir is null)
 var services = new ServiceCollection();
 
 services
-    .AddManualWeatherForecastClient(options => options.BaseAddress = exampleApiBaseAdress)
-    .AddNswagWeatherForecastClient(options => options.BaseAddress = exampleApiBaseAdress)
-    .AddRefitWeatherForecastClient(options => options.BaseAddress = exampleApiBaseAdress)
-    .AddRestSharpWeatherForecastClient(options => options.BaseUrl = exampleApiBaseAdress);
+    .AddExamples()
+    .AddManualWeatherForecastClient(options => options.BaseAddress = exampleApiBaseUri)
+    .AddNswagWeatherForecastClient(options => options.BaseAddress = exampleApiBaseUri)
+    .AddRefitWeatherForecastClient(options => options.BaseAddress = exampleApiBaseUri)
+    .AddRestEaseWeatherForecastClient(exampleApiBaseAdress)
+    .AddRestSharpWeatherForecastClient(options => options.BaseUrl = exampleApiBaseUri)
+    .AddFlurlWeatherForecastClient(options => options.BaseUri = exampleApiBaseAdress);
 
 var serviceProvider = services.BuildServiceProvider();
 
-var manualWeatherForecastClient = serviceProvider.GetRequiredService<IManualWeatherForecastClient>();
-var nswagWeatherForecastClient = serviceProvider.GetRequiredService<INswagWeatherForecastClient>();
-var refitWeatherForecastClient = serviceProvider.GetRequiredService<IRefitWeatherForecastClient>();
-var restSharpWeatherForecastClient = serviceProvider.GetRequiredService<IRestSharpWeatherForecastClient>();
+var getExamples = serviceProvider.GetRequiredService<GetExamples>();
+var postExamples = serviceProvider.GetRequiredService<PostExamples>();
 
-LogRetrievalMessage("Manual");
-var weatherForecastsViaManual = await manualWeatherForecastClient.GetAsync();
-LogResult(weatherForecastsViaManual.Count());
+var inputDemo = "1";
+var inputPerformance = "2";
 
-LogRetrievalMessage("NSwag");
-var weatherForecastsViaNswag = await nswagWeatherForecastClient.GetAsync();
-LogResult(weatherForecastsViaNswag.Count);
+var userInput = ConsoleHelper.GetUserInput(
+    prompt: $"Press '{inputDemo}' for Demo, press '{inputPerformance}' for Performance Test", 
+    firstTimePrompting: true,
+    allowedValues: new string[] { inputDemo, inputPerformance});
 
-LogRetrievalMessage("Refit");
-var weatherForecastsViaRefit = await refitWeatherForecastClient.GetAsync();
-LogResult(weatherForecastsViaRefit.Count());
-
-LogRetrievalMessage("RestSharp");
-var weatherForecastsViaRestSharp = await restSharpWeatherForecastClient.GetAsync();
-LogResult(weatherForecastsViaRestSharp.Count());
-
-Console.WriteLine("Demo complete, press any key to close the application");
-Console.ReadKey();
-
-void LogRetrievalMessage(string clientName)
+if (userInput == inputDemo)
 {
-    Console.WriteLine($"Retrieving WeatherForecasts via the {clientName} client...");
+    Console.WriteLine();
+    await getExamples.ExecuteExamples();
+    Console.WriteLine();
+    await postExamples.ExecuteExamples();
+    Console.WriteLine();
+    Console.WriteLine("Demo complete, press any key to close the application");
+    Console.ReadKey();
 }
-
-void LogResult(int count)
+else if (userInput == inputPerformance)
 {
-    Console.WriteLine($"Successfully Retrieved {count} WeatherForecasts!");
+    Console.WriteLine();
+    await getExamples.ExecuteGetPerformanceTest();
+    Console.WriteLine();
+    await postExamples.ExecutePostPerformanceTest();
+    Console.WriteLine();
+    Console.WriteLine("Performance test complete, press any key to close the application");
+    Console.ReadKey();
 }

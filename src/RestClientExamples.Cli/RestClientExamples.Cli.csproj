@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -9,9 +9,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RestClientExamples.ExampleApi.Models\RestClientExamples.ExampleApi.Models.csproj" />
+    <ProjectReference Include="..\RestClientExamples.Flurl\RestClientExamples.Flurl.csproj" />
     <ProjectReference Include="..\RestClientExamples.Manual\RestClientExamples.Manual.csproj" />
     <ProjectReference Include="..\RestClientExamples.NSwag\RestClientExamples.NSwag.csproj" />
     <ProjectReference Include="..\RestClientExamples.Refit\RestClientExamples.Refit.csproj" />
+    <ProjectReference Include="..\RestClientExamples.RestEase\RestClientExamples.RestEase.csproj" />
     <ProjectReference Include="..\RestClientExamples.RestSharp\RestClientExamples.RestSharp.csproj" />
   </ItemGroup>
 
