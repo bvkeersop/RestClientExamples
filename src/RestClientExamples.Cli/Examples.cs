@@ -10,7 +10,7 @@ namespace RestClientExamples.Cli;
 
 public abstract class Examples
 {
-    public const int numberOfExecutions = 1000;
+    public const int numberOfExecutions = 10000;
 
     public const string manual = "Manual";
     public const string nSwag = "NSwag";

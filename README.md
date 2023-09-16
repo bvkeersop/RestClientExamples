@@ -15,7 +15,9 @@ You can open the solution in visual studio and run it, this will do the followin
 
 1. Start the `RestClientExamples.ExampleApi`.
 2. Start the `RestClientExamples.Cli`.
-    - The `Cli` will make HTTP calls to the `ExampleApi` using the different types of clients.
+    - The `Cli` will prompt you to select an option:
+        1. Demo making HTTP calls to the `ExampleApi` using the different types of clients.
+        2. Execute a performance test using the different types of clients.
 
 Inside the `RestClientExamples` solution you will find the following:
 
