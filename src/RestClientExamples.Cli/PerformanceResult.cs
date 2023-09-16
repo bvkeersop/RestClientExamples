@@ -2,8 +2,8 @@
 
 public class PerformanceResult
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     public int NumberOfRequests { get; set; }
     public TimeSpan TotalDuration { get; set; }
-    public TimeSpan AvarageDurationPerRequest => TotalDuration / NumberOfRequests;
+    public TimeSpan AverageDurationPerRequest => TotalDuration / NumberOfRequests;
 }

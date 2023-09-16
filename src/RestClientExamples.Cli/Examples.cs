@@ -65,7 +65,7 @@ public abstract class Examples
 
     protected static void LogPerformance(params PerformanceResult[] performanceResults)
     {
-        var orderedPerformanceResults = performanceResults.OrderBy(p => p.AvarageDurationPerRequest);
+        var orderedPerformanceResults = performanceResults.OrderBy(p => p.AverageDurationPerRequest);
 
         Console.WriteLine();
         Console.WriteLine("--- Performance test results ---");
@@ -74,7 +74,7 @@ public abstract class Examples
             Console.WriteLine($"Client {performanceResult.Name} " +
                 $"executed {performanceResult.NumberOfRequests} " +
                 $"in {performanceResult.TotalDuration}, " +
-                $"This means the avarage request took {performanceResult.AvarageDurationPerRequest.TotalMilliseconds} miliseconds");
+                $"This means the average request took {performanceResult.AverageDurationPerRequest.TotalMilliseconds} miliseconds");
         }
         Console.WriteLine();
     }
