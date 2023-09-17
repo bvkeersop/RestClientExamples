@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <Target Name="GenerateNSwagClients" BeforeTargets="Build">
-	  <Exec Command="$(NSwagExe_Net60) run nswag.json /variables:Configuration=$(Configuration)" />
+	  <Exec Command="$(NSwagExe_Net60) run nswag.json" />
   </Target>
 	
 </Project>
